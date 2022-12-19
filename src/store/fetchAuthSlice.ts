@@ -28,6 +28,23 @@ const initialState: AuthUserState = {
   data: null,
   status: 'loading',
 };
+export const fetchAuthMe = createAsyncThunk('auth/fetchAuthMe', async () => {
+  const { data } = await axios.get('/auth/me');
+  return data;
+});
+
+export const fetchAuth = createAsyncThunk<any, Record<string, string>>(
+  'auth/fetchAuth',
+  async (obj, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post('/auth/login', obj);
+      return data;
+    } catch (err) {
+      //@ts-ignore
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
 
 export const fetchRegister = createAsyncThunk<TUser, TInputUserData>(
   'auth/register',
@@ -44,8 +61,40 @@ export const fetchRegister = createAsyncThunk<TUser, TInputUserData>(
 export const fetchAuthSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.data = null;
+      state.status = 'loading';
+    },
+  },
   extraReducers: (builder) => {
+    //GET USER ME
+    builder.addCase(fetchAuthMe.pending, (state) => {
+      state.data = null;
+      state.status = 'loading';
+    });
+    builder.addCase(fetchAuthMe.fulfilled, (state, action) => {
+      state.data = action.payload;
+      state.status = 'loaded';
+    });
+    builder.addCase(fetchAuthMe.rejected, (state) => {
+      state.data = null;
+      state.status = 'loading';
+    });
+    //AUTH USER
+    builder.addCase(fetchAuth.pending, (state) => {
+      state.data = null;
+      state.status = 'loading';
+    });
+    builder.addCase(fetchAuth.fulfilled, (state, action) => {
+      state.data = action.payload;
+      state.status = 'loaded';
+    });
+    builder.addCase(fetchAuth.rejected, (state, action) => {
+      state.data = null;
+      state.status = 'loading';
+      //console.log(action.payload);
+    });
     //REGISTER
     builder.addCase(fetchRegister.pending, (state) => {
       state.data = null;
@@ -62,6 +111,6 @@ export const fetchAuthSlice = createSlice({
   },
 });
 export const isAuthSelect = (state: RootState) => Boolean(state.fetchAuthSlice.data);
-export const {} = fetchAuthSlice.actions;
+export const { logout } = fetchAuthSlice.actions;
 
 export default fetchAuthSlice.reducer;

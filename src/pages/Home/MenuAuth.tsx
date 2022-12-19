@@ -1,14 +1,35 @@
 import React from 'react';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { logout } from '../../store/fetchAuthSlice';
+import { useAppDispatch } from '../../store/store';
 
 export const MenuAuth: React.FC = () => {
+  const dispatch = useAppDispatch();
   const menuHeader = [
-    { item: 'Регистрация', key: '/register', icon: UserOutlined },
-    { item: 'Авторизация', key: '/workshift', icon: VideoCameraOutlined },
-    { item: 'Выход', key: '/dev', icon: UploadOutlined },
+    { item: 'Профиль', key: 'profile', icon: UserOutlined },
+    { item: 'Выход', key: 'logOut', icon: LogoutOutlined },
   ];
+
+  const logOut = () => {
+    if (window.confirm('Вы действительно хотите выйти из аккаунта?')) {
+      dispatch(logout());
+      window.localStorage.removeItem('token');
+    }
+  };
+  const routeMyAccount = () => {};
+
+  const onClick = (key: any) => {
+    if (key === 'profile') {
+      console.log('profile');
+      routeMyAccount();
+    }
+    if (key === 'logOut') {
+      console.log('logOut');
+      logOut();
+    }
+  };
+
   return (
     <Menu
       theme="light"
@@ -17,9 +38,10 @@ export const MenuAuth: React.FC = () => {
       items={menuHeader.map((item, index) => ({
         key: item.key,
         icon: React.createElement(item.icon),
-        label: <Link to={item.key}>{item.item}</Link>,
+        label: item.item,
       }))}
       style={{ justifyContent: 'flex-end' }}
+      onClick={(item) => onClick(item.key)}
     />
   );
 };

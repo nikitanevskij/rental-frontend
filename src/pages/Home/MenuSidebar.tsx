@@ -1,14 +1,14 @@
 import React from 'react';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { UploadOutlined, FileDoneOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
 
 export const MenuSidebar: React.FC = () => {
   const menuSideBar = [
-    { item: 'Стартовая страница', key: '/', icon: UserOutlined },
-    { item: 'Рабочая смена', key: '/workshift', icon: VideoCameraOutlined },
+    { item: 'Стартовая страница', key: '/', icon: FileDoneOutlined },
+    { item: 'Рабочая смена', key: '/workshift', icon: BarChartOutlined },
     { item: 'В разработке', key: '/dev', icon: UploadOutlined },
-    { item: 'В разработке', key: '/dev1', icon: UserOutlined },
+    { item: 'В разработке', key: '/dev1', icon: UploadOutlined },
   ];
   return (
     <Menu

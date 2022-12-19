@@ -1,33 +1,33 @@
 import React from 'react';
-import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Typography } from 'antd';
-import './registration.scss';
+import './loginPage.scss';
 import { useAppDispatch } from '../../store/store';
-import { fetchRegister, isAuthSelect } from '../../store/fetchAuthSlice';
+import { fetchAuth, isAuthSelect } from '../../store/fetchAuthSlice';
 import { useSelector } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 
-export const Registration: React.FC = () => {
+export const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { Title } = Typography;
   const isAuth = useSelector(isAuthSelect);
+  const { Title } = Typography;
 
   // const [notification, setNotification] = React.useState({ message: '', type: 'danger' });
 
   const onFinish = async (values: any) => {
     // setNotification({ message: '', type: 'danger' });
     const { user } = values;
-    const registerUserData = await dispatch(fetchRegister(user));
+    const registerUserData = await dispatch(fetchAuth(user));
     //@ts-ignore
     if (!registerUserData.payload.token) {
-      return alert('Не удалось зарегистрироваться!');
+      return alert('Не удалось авторизоваться!');
     }
     //@ts-ignore
     if ('token' in registerUserData.payload) {
       //@ts-ignore
       window.localStorage.setItem('token', registerUserData.payload.token);
     } else {
-      alert('Не удалось зарегестрироваться!');
+      alert('Не удалось авторизоваться!');
     }
 
     // setNotification({ message: 'Успешная регистранция', type: 'success' });
@@ -35,24 +35,13 @@ export const Registration: React.FC = () => {
   if (isAuth) {
     return <Navigate to="/" />;
   }
-
   return (
     <div className="root">
       <div className="registration-form">
         <Title level={4} className="registration-form__title">
-          Регистрация
+          Авторизация
         </Title>
         <Form name="registration" initialValues={{ remember: true }} onFinish={onFinish}>
-          <Form.Item
-            name={['user', 'fullName']}
-            initialValue="victor"
-            rules={[{ required: true, message: 'Please input your Username!' }]}
-          >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
-            />
-          </Form.Item>
           <Form.Item
             name={['user', 'email']}
             initialValue="mysite@app.js"
@@ -70,12 +59,21 @@ export const Registration: React.FC = () => {
               placeholder="Password"
             />
           </Form.Item>
+          <Form.Item>
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+
+            <a className="registration-form__forgot" href="">
+              Forgot password
+            </a>
+          </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" className="registration-form__button">
-              Register
+              Log in
             </Button>
-            Or <Link to="/login">login now! </Link>
+            Or <Link to="/register">register now!</Link>
           </Form.Item>
         </Form>
       </div>

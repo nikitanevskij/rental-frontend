@@ -1,18 +1,25 @@
 import React from 'react';
 import { Layout, theme } from 'antd';
 import './home.scss';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import WorkShift from './WorkShift/WorkShift';
 import StartPage from './StartPage/StartPage';
 import { MenuAuth } from './MenuAuth';
 import { MenuSidebar } from './MenuSidebar';
+import { useSelector } from 'react-redux';
+import { isAuthSelect } from '../../store/fetchAuthSlice';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 export const Home: React.FC = () => {
+  const isAuth = useSelector(isAuthSelect);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  if (!isAuth) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <Layout className="root">
