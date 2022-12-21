@@ -1,19 +1,19 @@
 import React from 'react';
 import { Button, Table, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+// import type { ColumnsType } from 'antd/es/table';
 import { RentalForm } from '../../components/Form/RentalForm';
 
-interface DataType {
-  key: React.Key;
-  name: string;
-  numberDoc: string;
-  numberPhone: string;
-  description: string;
-  equipment: string[];
-  timeStart: string;
-}
+// interface DataType {
+//   key: React.Key;
+//   name: string;
+//   numberDoc: string;
+//   numberPhone: string;
+//   description: string;
+//   equipment: string[];
+//   timeStart: string;
+// }
 
-const columns: ColumnsType<DataType> = [
+const columns = [
   { title: 'Имя, Фамилия', dataIndex: 'name', key: 'name' },
   { title: 'Номер документа', dataIndex: 'numberDoc', key: 'numberDoc' },
   { title: 'Мобильный номер', dataIndex: 'numberPhone', key: 'numberPhone' },
@@ -46,7 +46,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
+const data = [
   {
     key: 1,
     name: 'Петрова Юля',
@@ -85,18 +85,18 @@ const data: DataType[] = [
   },
 ];
 
-const App: React.FC = () => {
-  const [visibleAddFrom, setVisibleAddFrom] = React.useState(false);
+const App = () => {
+  const [visibleForm, setVisibleForm] = React.useState(false);
   return (
     <>
       <Button
         type="primary"
-        onClick={() => setVisibleAddFrom(!visibleAddFrom)}
+        onClick={() => setVisibleForm(!visibleForm)}
         style={{ marginBottom: 15 }}
       >
         Добавить аренду
       </Button>
-      {visibleAddFrom && <RentalForm />}
+      {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />}
       <Table
         columns={columns}
         expandable={{

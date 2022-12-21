@@ -17,9 +17,9 @@ export const Home: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  if (!isAuth) {
-    return <Navigate to="/login" />;
-  }
+  // if (!isAuth) {
+  //   return <Navigate to="/login" />;
+  // }
 
   return (
     <Layout className="root">

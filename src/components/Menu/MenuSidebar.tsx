@@ -14,7 +14,7 @@ export const MenuSidebar: React.FC = () => {
     <Menu
       theme="dark"
       mode="inline"
-      defaultSelectedKeys={['/']}
+      defaultSelectedKeys={['/workshift']}
       items={menuSideBar.map((item, index) => ({
         key: item.key,
         icon: React.createElement(item.icon),

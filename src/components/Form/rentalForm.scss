@@ -1,3 +1,5 @@
+.active {
+}
 .active:after {
   content: '';
   position: absolute;
@@ -10,14 +12,16 @@
 }
 
 .inner {
+  padding: 20px;
+  border-radius: 15px;
+  background: #ffffff;
   position: absolute;
   max-width: 800px;
-  max-height: 500px;
+  max-height: 600px;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   margin: auto;
-  border: 1px solid black;
   z-index: 3;
 }
