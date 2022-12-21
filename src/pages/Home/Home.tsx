@@ -2,10 +2,10 @@ import React from 'react';
 import { Layout, theme } from 'antd';
 import './home.scss';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import WorkShift from './WorkShift/WorkShift';
-import StartPage from './StartPage/StartPage';
-import { MenuAuth } from './MenuAuth';
-import { MenuSidebar } from './MenuSidebar';
+import WorkShift from '../WorkShift/WorkShift';
+import StartPage from '../StartPage/StartPage';
+import { MenuAuth } from '../../components/Menu/MenuAuth';
+import { MenuSidebar } from '../../components/Menu/MenuSidebar';
 import { useSelector } from 'react-redux';
 import { isAuthSelect } from '../../store/fetchAuthSlice';
 
