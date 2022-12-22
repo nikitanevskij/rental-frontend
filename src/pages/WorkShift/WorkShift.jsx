@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Table, Tag } from 'antd';
 // import type { ColumnsType } from 'antd/es/table';
 import { RentalForm } from '../../components/Form/RentalForm';
+import { useSelector } from 'react-redux';
 
 // interface DataType {
 //   key: React.Key;
@@ -14,16 +15,16 @@ import { RentalForm } from '../../components/Form/RentalForm';
 // }
 
 const columns = [
-  { title: 'Имя, Фамилия', dataIndex: 'name', key: 'name' },
-  { title: 'Номер документа', dataIndex: 'numberDoc', key: 'numberDoc' },
-  { title: 'Мобильный номер', dataIndex: 'numberPhone', key: 'numberPhone' },
+  { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName' },
+  { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber' },
+  { title: 'Мобильный номер', dataIndex: 'phoneNumber', key: 'phoneNumber' },
   {
     title: 'Оборудование',
-    key: 'equipment',
-    dataIndex: 'equipment',
-    render: (_, { equipment }) => (
+    key: 'selectEquipment',
+    dataIndex: 'selectEquipment',
+    render: (_, { selectEquipment }) => (
       <>
-        {equipment.map((tag) => {
+        {selectEquipment.map((tag) => {
           let color = tag.length > 5 ? 'geekblue' : 'green';
           if (tag === 'loser') {
             color = 'volcano';
@@ -37,7 +38,14 @@ const columns = [
       </>
     ),
   },
-  { title: 'Время старта', dataIndex: 'timeStart', key: 'timeStart' },
+  {
+    title: 'Время старта',
+    dataIndex: 'dateTime',
+    key: 'dateTime',
+    render: (text) => {
+      return <>{text}</>;
+    },
+  },
   {
     title: 'Action',
     dataIndex: '',
@@ -45,65 +53,32 @@ const columns = [
     render: () => <a>Завершить</a>,
   },
 ];
-
-const data = [
-  {
-    key: 1,
-    name: 'Петрова Юля',
-    numberDoc: 'MP267365',
-    numberPhone: '+374483883888',
-    equipment: ['bike', 'samokat'],
-    description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
-    timeStart: '23:12:00',
-  },
-  {
-    key: 2,
-    name: 'Акенфеев Владимир',
-    numberDoc: 'MP267365',
-    numberPhone: '+374483883888',
-    equipment: ['bike', 'samokat'],
-    description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.',
-    timeStart: '23:12:00',
-  },
-  {
-    key: 3,
-    name: 'Дроздова Анастасия',
-    numberDoc: 'MP267365',
-    numberPhone: '+374483883888',
-    equipment: ['bike', 'samokat'],
-    description: 'This not expandable',
-    timeStart: '23:12:00',
-  },
-  {
-    key: 4,
-    name: 'Валькевич Рафаэль',
-    numberDoc: 'MP267365',
-    numberPhone: '+374483883888',
-    equipment: ['bike', 'samokat', 'bike', 'bike', 'samokat'],
-    description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-    timeStart: '23:12:00',
-  },
-];
+const columns1 = [columns[0], ...columns.slice(3, 6)];
 
 const App = () => {
   const [visibleForm, setVisibleForm] = React.useState(false);
+  const [visibleInfom, setvisibleInfom] = React.useState(false);
+  const { currentData } = useSelector((state) => state.rentalSlice);
   return (
     <>
       <Button
         type="primary"
         onClick={() => setVisibleForm(!visibleForm)}
-        style={{ marginBottom: 15 }}
+        style={{ marginBottom: 15, marginRight: 15 }}
       >
         Добавить аренду
       </Button>
+      <Button onClick={() => setvisibleInfom(!visibleInfom)}> Доп информация</Button>
+
       {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />}
       <Table
-        columns={columns}
+        style={{ overflow: 'auto' }}
+        columns={visibleInfom ? columns1 : columns}
         expandable={{
           expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
           rowExpandable: (record) => record.name !== 'Not Expandable',
         }}
-        dataSource={data}
+        dataSource={currentData}
       />
     </>
   );

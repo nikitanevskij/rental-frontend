@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import fetchAuthSlice from './fetchAuthSlice';
+import rentalSlice from './rentalSlice';
 import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
-  reducer: { fetchAuthSlice },
+  reducer: { fetchAuthSlice, rentalSlice },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

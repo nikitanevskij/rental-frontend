@@ -4,13 +4,18 @@ import { Option } from 'antd/es/mentions';
 import React from 'react';
 import { CascaderInput } from './inputs/CascaderInput';
 import './rentalForm.scss';
+import { useAppDispatch } from '../../store/store';
+import { addRent } from '../../store/rentalSlice';
 
 export const RentalForm = ({ setVisibleForm }) => {
+  const dispatch = useAppDispatch();
   const onFinish = (fieldsValue) => {
     const values = {
       ...fieldsValue,
+      phoneNumber: `+375 (${fieldsValue.prefix}) ${fieldsValue.phoneNumber}`,
       dateTime: fieldsValue['dateTime'].format('YYYY-MM-DD HH:mm:ss'),
     };
+    dispatch(addRent(values));
     console.log('Success:', values);
     setVisibleForm((prev) => !prev);
   };
@@ -35,18 +40,19 @@ export const RentalForm = ({ setVisibleForm }) => {
   );
 
   return (
-    <header className="active">
+    <div className="active">
       <div className="inner">
         <Form
           name="basic"
+          // layout="vertical"
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 22 }}
           initialValues={{
             remember: true,
-            username: 'Газманов Олег',
+            userName: 'Газманов Олег',
             docNumber: 'MP123456',
             prefix: '29',
-            numberPhone: '2343434',
+            phoneNumber: '2343434',
             timeRental: 'a',
           }}
           onFinish={onFinish}
@@ -55,7 +61,7 @@ export const RentalForm = ({ setVisibleForm }) => {
         >
           <Form.Item
             label="Имя, Фамилия"
-            name="username"
+            name="userName"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
             <Input />
@@ -70,7 +76,7 @@ export const RentalForm = ({ setVisibleForm }) => {
           </Form.Item>
           <Form.Item
             label="Мобильный номер"
-            name="numberPhone"
+            name="phoneNumber"
             rules={[{ required: true, message: 'Please input your password!' }]}
           >
             <Input
@@ -135,15 +141,17 @@ export const RentalForm = ({ setVisibleForm }) => {
           <Form.Item name="comment" label="Примечание">
             <Input.TextArea />
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+
+          <Form.Item wrapperCol={{}}>
+            <Button style={{ marginRight: 10 }} onClick={() => setVisibleForm((prev) => !prev)}>
+              Сбросить и закрыть
+            </Button>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
-
-          <Button onClick={() => setVisibleForm((prev) => !prev)}>Сбросить и закрыть</Button>
         </Form>
       </div>
-    </header>
+    </div>
   );
 };
