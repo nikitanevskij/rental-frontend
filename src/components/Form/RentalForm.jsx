@@ -1,8 +1,5 @@
 import { Button, DatePicker, Form, Input, Radio, Select } from 'antd';
-import dayjs from 'dayjs';
 import { Option } from 'antd/es/mentions';
-import React from 'react';
-import { CascaderInput } from './inputs/CascaderInput';
 import './rentalForm.scss';
 import { useAppDispatch } from '../../store/store';
 import { addRent } from '../../store/rentalSlice';
