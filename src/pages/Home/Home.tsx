@@ -8,11 +8,11 @@ import { MenuAuth } from '../../components/Menu/MenuAuth';
 import { MenuSidebar } from '../../components/Menu/MenuSidebar';
 import { useSelector } from 'react-redux';
 import { isAuthSelect } from '../../store/fetchAuthSlice';
-
 const { Header, Content, Footer, Sider } = Layout;
 
 export const Home: React.FC = () => {
   const isAuth = useSelector(isAuthSelect);
+  const [collapsed, setCollapsed] = React.useState(true);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -23,16 +23,7 @@ export const Home: React.FC = () => {
 
   return (
     <Layout className="root">
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
-      >
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" />
         <MenuSidebar />
       </Sider>

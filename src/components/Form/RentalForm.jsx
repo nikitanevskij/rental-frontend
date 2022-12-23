@@ -3,6 +3,7 @@ import { Option } from 'antd/es/mentions';
 import './rentalForm.scss';
 import { useAppDispatch } from '../../store/store';
 import { addRent } from '../../store/rentalSlice';
+import dayjs from 'dayjs';
 
 export const RentalForm = ({ setVisibleForm }) => {
   const dispatch = useAppDispatch();
