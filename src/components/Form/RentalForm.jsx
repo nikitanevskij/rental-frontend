@@ -12,6 +12,7 @@ export const RentalForm = ({ setVisibleForm }) => {
   const onFinish = (fieldsValue) => {
     const values = {
       ...fieldsValue,
+      key: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       phoneNumber: `+375 (${fieldsValue.prefix}) ${fieldsValue.phoneNumber}`,
       startTimeRegistration: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       startTimeTrip: dayjs().add(10, 'minute').format('YYYY-MM-DD HH:mm:ss'),
@@ -20,6 +21,16 @@ export const RentalForm = ({ setVisibleForm }) => {
     console.log('Success:', values);
     setVisibleForm((prev) => !prev);
   };
+
+  const options = [
+    { label: 'Silverback L синий 1', value: 'Silverback L синий 1 bike' },
+    { label: 'Silverback L синий 2', value: 'Silverback L синий 2 bike' },
+    { label: 'Silverback L синий 3', value: 'Silverback L синий 3 bike' },
+    { label: 'Silverback L синий 4', value: 'Silverback L синий 4 bike' },
+    { label: 'Silverback L синий 5', value: 'Silverback L синий 5 bike' },
+    { label: 'Xiaomi m365 1', value: 'Xiaomi m365 1 sam' },
+    { label: 'Xiaomi m365 2', value: 'Xiaomi m365 2 sam' },
+  ];
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -55,6 +66,7 @@ export const RentalForm = ({ setVisibleForm }) => {
             prefix: '29',
             phoneNumber: '2343434',
             timeRental: 'a',
+            comment: '',
           }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -93,17 +105,11 @@ export const RentalForm = ({ setVisibleForm }) => {
             label="Выбор оборудования"
             rules={[{ required: true, message: 'Пожалуйста выберите оборудование', type: 'array' }]}
           >
-            <Select mode="multiple" placeholder="Please select favourite colors">
-              <Option value="bike_1">Silverback L 26 blue 1729</Option>
-              <Option value="bike_2">Stels M 26 light blue</Option>
-              <Option value="bike_3">Silverback L 26 blue 2229</Option>
-              <Option value="bike_4">Silverback L 26 blue 2249</Option>
-              <Option value="bike_5">Silverback L 26 blue 2109</Option>
-              <Option value="bike_5">Silverback L 26 blue 2269</Option>
-              <Option value="bike_6">Silverback L 26 blue 2209</Option>
-              <Option value="sam_1">Xiaomi m365 </Option>
-              <Option value="sam_2">Xiaomi m365 pro</Option>
-            </Select>
+            <Select
+              mode="multiple"
+              placeholder="Please select favourite colors"
+              options={options}
+            />
           </Form.Item>
 
           <Form.Item name="timeRental" label="Время аренды">
@@ -121,7 +127,7 @@ export const RentalForm = ({ setVisibleForm }) => {
               <Radio.Button value="o">сутки</Radio.Button>
             </Radio.Group>
           </Form.Item>
-          <Form.Item name="dateTime" label="Оформление">
+          <Form.Item label="Оформление">
             <Text>{dayjs().format('YYYY-MM-DD HH:mm:ss')}</Text>
           </Form.Item>
           <Form.Item name="comment" label="Примечание">

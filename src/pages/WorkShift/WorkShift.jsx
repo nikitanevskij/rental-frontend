@@ -19,6 +19,21 @@ import { FormOutlined, DeleteTwoTone } from '@ant-design/icons';
 //   timeStart: string;
 // }
 
+export function msToTime(ms) {
+  const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+  const daysms = ms % (24 * 60 * 60 * 1000);
+  const hours = Math.floor(daysms / (60 * 60 * 1000));
+  const hoursms = ms % (60 * 60 * 1000);
+  const minutes = Math.floor(hoursms / (60 * 1000));
+  const minutesms = ms % (60 * 1000);
+  const seconds = Math.floor(minutesms / 1000);
+
+  const hoursGet = hours < 10 ? '0' + hours : hours;
+  const minutesGet = minutes < 10 ? '0' + minutes : minutes;
+  // const secondsGet = seconds < 10 ? '0' + seconds : seconds;
+  return days + 'д ' + hoursGet + 'ч ' + minutesGet + 'м ';
+}
+
 const App = () => {
   dayjs.extend(relativeTime);
   const [visibleForm, setVisibleForm] = React.useState(false);
@@ -26,6 +41,7 @@ const App = () => {
   const [visibleInfom, setvisibleInfom] = React.useState(false);
   const { currentData } = useSelector((state) => state.rentalSlice);
   const [clockState, setclockState] = React.useState(null);
+  const [currentSelectedObj, setCurrentSelectedObj] = React.useState({});
 
   const getDate = () => {
     const date = dayjs().format('HH:mm:ss DD/MM/YYYY');
@@ -36,33 +52,15 @@ const App = () => {
     setInterval(getDate, 1000);
   }, []);
 
-  function msToTime(ms) {
-    const days = Math.floor(ms / (24 * 60 * 60 * 1000));
-    const daysms = ms % (24 * 60 * 60 * 1000);
-    const hours = Math.floor(daysms / (60 * 60 * 1000));
-    const hoursms = ms % (60 * 60 * 1000);
-    const minutes = Math.floor(hoursms / (60 * 1000));
-    const minutesms = ms % (60 * 1000);
-    const seconds = Math.floor(minutesms / 1000);
-
-    const hoursGet = hours < 10 ? '0' + hours : hours;
-    const minutesGet = minutes < 10 ? '0' + minutes : minutes;
-    // const secondsGet = seconds < 10 ? '0' + seconds : seconds;
-    return days + 'д ' + hoursGet + 'ч ' + minutesGet + 'м ';
-  }
-
-  // const resultPrice = (arr, time) => {};
-
-  // console.log(resultPrice(['bike', 'samokat', 'bike']));
   const columns = [
     { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 200 },
-    { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber' },
-    { title: 'Мобильный номер', dataIndex: 'phoneNumber', key: 'phoneNumber' },
+    { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber', width: 160 },
+    { title: 'Мобильный номер', dataIndex: 'phoneNumber', key: 'phoneNumber', width: 170 },
     {
       title: 'Оборудование',
       key: 'selectEquipment',
       dataIndex: 'selectEquipment',
-      width: 100,
+      width: 80,
       render: (_, { selectEquipment }) => (
         <>
           {selectEquipment.map((tag) => {
@@ -139,11 +137,43 @@ const App = () => {
       },
     },
     {
-      title: 'Итого',
+      title: 'Итого р.',
       dataIndex: 'price',
       width: 100,
       key: 'price',
-      render: () => {
+      render: (_, data) => {
+        const diff = dayjs().diff(data.startTimeTrip);
+        const convMinute = Math.trunc(diff / 60000);
+
+        if (convMinute <= 15) {
+          const result = data.selectEquipment.reduce((sum, item) => {
+            if (item.includes('bike')) return sum + 2.5;
+            if (item.includes('sam')) return sum + 3;
+          }, 0);
+          return <>{result}</>;
+        }
+        if (convMinute >= 15 && convMinute <= 30) {
+          const result = data.selectEquipment.reduce((sum, item) => {
+            if (item.includes('bike')) return sum + 2.5;
+            if (item.includes('sam')) return sum + 6;
+          }, 0);
+          return <>{result}</>;
+        }
+        if (convMinute >= 30 && convMinute <= 45) {
+          const result = data.selectEquipment.reduce((sum, item) => {
+            if (item.includes('bike')) return sum + 5;
+            if (item.includes('sam')) return sum + 9;
+          }, 0);
+          return <>{result}</>;
+        }
+        if (convMinute >= 45 && convMinute <= 60) {
+          const result = data.selectEquipment.reduce((sum, item) => {
+            if (item.includes('bike')) return sum + 5;
+            if (item.includes('sam')) return sum + 12;
+          }, 0);
+          return <>{result}</>;
+        }
+
         return <>считаю</>;
       },
     },
@@ -153,9 +183,15 @@ const App = () => {
       dataIndex: 'e',
       key: 'e',
       width: 210,
-      render: () => (
+      render: (_, data) => (
         <>
-          <Button onClick={() => setVisibleTotal(true)} style={{ marginRight: 10 }}>
+          <Button
+            onClick={() => {
+              setVisibleTotal(true);
+              setCurrentSelectedObj(data.key);
+            }}
+            style={{ marginRight: 10 }}
+          >
             Завершить аренду
           </Button>
           <Button icon={<FormOutlined />} style={{ marginRight: 10 }}></Button>
@@ -175,11 +211,25 @@ const App = () => {
       >
         Добавить аренду
       </Button>
-      <Button onClick={() => setvisibleInfom(!visibleInfom)}> Доп информация</Button>
+      <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+        Выдать Volvo
+      </Button>
+      <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+        Выдать Mercedes
+      </Button>
+      <Button onClick={() => setvisibleInfom(!visibleInfom)}>Доп информация</Button>
+
       <div>{clockState}</div>
 
       {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />}
-      {visibleTotal && <Total setVisibleTotal={setVisibleTotal} setVisibleForm={setVisibleForm} />}
+      {visibleTotal && (
+        <Total
+          setVisibleTotal={setVisibleTotal}
+          setVisibleForm={setVisibleForm}
+          currentSelectedObj={currentSelectedObj}
+          setCurrentSelectedObj={setCurrentSelectedObj}
+        />
+      )}
       <Table
         style={{ overflow: 'auto' }}
         columns={visibleInfom ? columns : columns1}
