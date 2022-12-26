@@ -51,9 +51,9 @@ const App = () => {
     return days + 'д ' + hoursGet + 'ч ' + minutesGet + 'м ';
   }
 
-  const resultPrice = (arr, time) => {};
+  // const resultPrice = (arr, time) => {};
 
-  console.log(resultPrice(['bike', 'samokat', 'bike']));
+  // console.log(resultPrice(['bike', 'samokat', 'bike']));
   const columns = [
     { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 200 },
     { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber' },
@@ -62,6 +62,7 @@ const App = () => {
       title: 'Оборудование',
       key: 'selectEquipment',
       dataIndex: 'selectEquipment',
+      width: 100,
       render: (_, { selectEquipment }) => (
         <>
           {selectEquipment.map((tag) => {
@@ -89,8 +90,8 @@ const App = () => {
     },
     {
       title: 'Время старта',
-      dataIndex: 'dateTime',
-      key: 'dateTime',
+      dataIndex: 'startTimeTrip',
+      key: 'startTimeTrip',
       width: 170,
       render: (text) => {
         return <>{text}</>;
@@ -98,13 +99,40 @@ const App = () => {
     },
     {
       title: 'Время в пути',
-      dataIndex: 'dateTime',
-      key: 'dateTime',
+      dataIndex: 'startTimeTrip',
+      key: 'startTimeTrip',
       width: 120,
       render: (date) => {
         const diff = dayjs().diff(date);
+        // console.log(Math.trunc(diff / 60000));
+        const a = Math.trunc(diff / 60000);
+        const diff1 = (numb) => {
+          switch (numb) {
+            case -8:
+              return 10;
+            case -7:
+              return 20;
+            case -6:
+              return 30;
+            case -5:
+              return 40;
+            case -4:
+              return 50;
+            case -3:
+              return 60;
+            case -2:
+              return 70;
+            case -1:
+              return 80;
+            case -0:
+              return 90;
+            case 0:
+              return 100;
+            default:
+          }
+        };
         if (diff < 0) {
-          return <Progress percent={50} status="active" />;
+          return <Progress percent={diff1(a)} status="active" />;
         }
         const result = msToTime(diff);
         return <>{result}</>;
@@ -113,15 +141,18 @@ const App = () => {
     {
       title: 'Итого',
       dataIndex: 'price',
+      width: 100,
       key: 'price',
-      render: () => {},
+      render: () => {
+        return <>считаю</>;
+      },
     },
 
     {
       title: 'Действие',
       dataIndex: 'e',
       key: 'e',
-      width: 270,
+      width: 210,
       render: () => (
         <>
           <Button onClick={() => setVisibleTotal(true)} style={{ marginRight: 10 }}>

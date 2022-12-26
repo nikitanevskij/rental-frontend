@@ -1,9 +1,11 @@
-import { Button, DatePicker, Form, Input, Radio, Select } from 'antd';
+import { Button, Form, Input, Radio, Select, Typography } from 'antd';
 import { Option } from 'antd/es/mentions';
 import './rentalForm.scss';
 import { useAppDispatch } from '../../store/store';
 import { addRent } from '../../store/rentalSlice';
 import dayjs from 'dayjs';
+
+const { Text } = Typography;
 
 export const RentalForm = ({ setVisibleForm }) => {
   const dispatch = useAppDispatch();
@@ -11,7 +13,8 @@ export const RentalForm = ({ setVisibleForm }) => {
     const values = {
       ...fieldsValue,
       phoneNumber: `+375 (${fieldsValue.prefix}) ${fieldsValue.phoneNumber}`,
-      dateTime: fieldsValue['dateTime'].format('YYYY-MM-DD HH:mm:ss'),
+      startTimeRegistration: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      startTimeTrip: dayjs().add(10, 'minute').format('YYYY-MM-DD HH:mm:ss'),
     };
     dispatch(addRent(values));
     console.log('Success:', values);
@@ -60,7 +63,7 @@ export const RentalForm = ({ setVisibleForm }) => {
           <Form.Item
             label="Имя, Фамилия"
             name="userName"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
           >
             <Input />
           </Form.Item>
@@ -68,14 +71,14 @@ export const RentalForm = ({ setVisibleForm }) => {
           <Form.Item
             label="Номер документа"
             name="docNumber"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Мобильный номер"
             name="phoneNumber"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
           >
             <Input
               addonBefore={prefixSelector}
@@ -88,26 +91,22 @@ export const RentalForm = ({ setVisibleForm }) => {
           <Form.Item
             name="selectEquipment"
             label="Выбор оборудования"
-            rules={[
-              { required: true, message: 'Please select your favourite colors!', type: 'array' },
-            ]}
+            rules={[{ required: true, message: 'Пожалуйста выберите оборудование', type: 'array' }]}
           >
             <Select mode="multiple" placeholder="Please select favourite colors">
-              <Option value="red">Silverback L 26 blue 1729</Option>
-              <Option value="green">Stels M 26 light blue</Option>
-              <Option value="blue1">Silverback L 26 blue 2229</Option>
-              <Option value="blue2">Silverback L 26 blue 2249</Option>
-              <Option value="blue3">Silverback L 26 blue 2109</Option>
-              <Option value="blue4">Silverback L 26 blue 2269</Option>
-              <Option value="blue5">Silverback L 26 blue 2209</Option>
+              <Option value="bike_1">Silverback L 26 blue 1729</Option>
+              <Option value="bike_2">Stels M 26 light blue</Option>
+              <Option value="bike_3">Silverback L 26 blue 2229</Option>
+              <Option value="bike_4">Silverback L 26 blue 2249</Option>
+              <Option value="bike_5">Silverback L 26 blue 2109</Option>
+              <Option value="bike_5">Silverback L 26 blue 2269</Option>
+              <Option value="bike_6">Silverback L 26 blue 2209</Option>
+              <Option value="sam_1">Xiaomi m365 </Option>
+              <Option value="sam_2">Xiaomi m365 pro</Option>
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name="timeRental"
-            label="Время аренды"
-            rules={[{ required: true, message: 'Please pick an item!' }]}
-          >
+          <Form.Item name="timeRental" label="Время аренды">
             <Radio.Group>
               <Radio.Button value="a">по факту</Radio.Button>
               <Radio.Button value="bq">15 </Radio.Button>
@@ -122,19 +121,8 @@ export const RentalForm = ({ setVisibleForm }) => {
               <Radio.Button value="o">сутки</Radio.Button>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
-            name="dateTime"
-            label="Время старта"
-            rules={[
-              {
-                type: 'object',
-                required: true,
-                message: 'Please select time!',
-              },
-            ]}
-          >
-            {/* <DatePicker picker="month" defaultValue={dayjs('2015-06', 'YYYY-MM')} /> */}
-            <DatePicker format="YYYY-MM-DD HH:mm:ss" showTime />
+          <Form.Item name="dateTime" label="Оформление">
+            <Text>{dayjs().format('YYYY-MM-DD HH:mm:ss')}</Text>
           </Form.Item>
           <Form.Item name="comment" label="Примечание">
             <Input.TextArea />
@@ -145,7 +133,7 @@ export const RentalForm = ({ setVisibleForm }) => {
               Сбросить и закрыть
             </Button>
             <Button type="primary" htmlType="submit">
-              Submit
+              Готово, выдать!
             </Button>
           </Form.Item>
         </Form>
