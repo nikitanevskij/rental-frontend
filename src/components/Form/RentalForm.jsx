@@ -65,7 +65,7 @@ export const RentalForm = ({ setVisibleForm }) => {
             docNumber: 'MP123456',
             prefix: '29',
             phoneNumber: '2343434',
-            timeRental: 'a',
+            timeRental: 'fact',
             comment: '',
           }}
           onFinish={onFinish}
@@ -105,26 +105,22 @@ export const RentalForm = ({ setVisibleForm }) => {
             label="Выбор оборудования"
             rules={[{ required: true, message: 'Пожалуйста выберите оборудование', type: 'array' }]}
           >
-            <Select
-              mode="multiple"
-              placeholder="Please select favourite colors"
-              options={options}
-            />
+            <Select mode="multiple" placeholder="Выберите оборудование" options={options} />
           </Form.Item>
 
           <Form.Item name="timeRental" label="Время аренды">
             <Radio.Group>
-              <Radio.Button value="a">по факту</Radio.Button>
-              <Radio.Button value="bq">15 </Radio.Button>
-              <Radio.Button value="b">30 </Radio.Button>
-              <Radio.Button value="c">1 </Radio.Button>
-              <Radio.Button value="d">1.5 </Radio.Button>
-              <Radio.Button value="e">2 </Radio.Button>
-              <Radio.Button value="f">2.5 </Radio.Button>
-              <Radio.Button value="g">3 </Radio.Button>
-              <Radio.Button value="y">3.5 </Radio.Button>
-              <Radio.Button value="u">4 </Radio.Button>
-              <Radio.Button value="o">сутки</Radio.Button>
+              <Radio.Button value="fact">по факту</Radio.Button>
+              <Radio.Button value="15 мин">15</Radio.Button>
+              <Radio.Button value="30 мин">30</Radio.Button>
+              <Radio.Button value="1 час">1</Radio.Button>
+              <Radio.Button value="1.5 часа">1.5</Radio.Button>
+              <Radio.Button value="2 часа">2</Radio.Button>
+              <Radio.Button value="2.5 часа">2.5</Radio.Button>
+              <Radio.Button value="3 часа">3</Radio.Button>
+              <Radio.Button value="3.5 часа">3.5</Radio.Button>
+              <Radio.Button value="4 часа">4</Radio.Button>
+              <Radio.Button value="day">сутки</Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item label="Оформление">

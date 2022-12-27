@@ -1,13 +1,12 @@
 import React from 'react';
-import { Button, Progress, Table, Tag, TimePicker } from 'antd';
-// import type { ColumnsType } from 'antd/es/table';
+import { Button, Progress, Table, Tag } from 'antd';
 import { RentalForm } from '../../components/Form/RentalForm';
 import { useSelector } from 'react-redux';
 import Total from '../../components/Total/Total';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import calendar from 'dayjs/plugin/calendar';
-import { FormOutlined, DeleteTwoTone } from '@ant-design/icons';
+import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
+import { msToTime } from '../../helpers/helper';
 
 // interface DataType {
 //   key: React.Key;
@@ -19,57 +18,41 @@ import { FormOutlined, DeleteTwoTone } from '@ant-design/icons';
 //   timeStart: string;
 // }
 
-export function msToTime(ms) {
-  const days = Math.floor(ms / (24 * 60 * 60 * 1000));
-  const daysms = ms % (24 * 60 * 60 * 1000);
-  const hours = Math.floor(daysms / (60 * 60 * 1000));
-  const hoursms = ms % (60 * 60 * 1000);
-  const minutes = Math.floor(hoursms / (60 * 1000));
-  const minutesms = ms % (60 * 1000);
-  const seconds = Math.floor(minutesms / 1000);
-
-  const hoursGet = hours < 10 ? '0' + hours : hours;
-  const minutesGet = minutes < 10 ? '0' + minutes : minutes;
-  // const secondsGet = seconds < 10 ? '0' + seconds : seconds;
-  return days + 'д ' + hoursGet + 'ч ' + minutesGet + 'м ';
-}
-
 const App = () => {
   dayjs.extend(relativeTime);
   const [visibleForm, setVisibleForm] = React.useState(false);
   const [visibleTotal, setVisibleTotal] = React.useState(false);
   const [visibleInfom, setvisibleInfom] = React.useState(false);
-  const { currentData } = useSelector((state) => state.rentalSlice);
   const [clockState, setclockState] = React.useState(null);
   const [currentSelectedObj, setCurrentSelectedObj] = React.useState({});
+  const { currentData } = useSelector((state) => state.rentalSlice);
 
   const getDate = () => {
     const date = dayjs().format('HH:mm:ss DD/MM/YYYY');
     setclockState(date);
   };
+
   React.useEffect(() => {
     getDate();
     setInterval(getDate, 1000);
   }, []);
 
   const columns = [
-    { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 200 },
+    { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 140, fixed: 'left' },
     { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber', width: 160 },
     { title: 'Мобильный номер', dataIndex: 'phoneNumber', key: 'phoneNumber', width: 170 },
     {
       title: 'Оборудование',
       key: 'selectEquipment',
       dataIndex: 'selectEquipment',
-      width: 80,
+      width: 200,
       render: (_, { selectEquipment }) => (
         <>
           {selectEquipment.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
+            let color = tag.includes('bike') ? 'green' : 'red';
+
             return (
-              <Tag color={color} key={tag}>
+              <Tag color={color} key={tag} style={{ marginBottom: 2 }}>
                 {tag.toUpperCase()}
               </Tag>
             );
@@ -83,7 +66,7 @@ const App = () => {
       key: 'timeRental',
       width: 130,
       render: (text) => {
-        return <Tag>{text}</Tag>;
+        return <Tag icon={<ClockCircleOutlined />}>{text}</Tag>;
       },
     },
     {
@@ -92,7 +75,7 @@ const App = () => {
       key: 'startTimeTrip',
       width: 170,
       render: (text) => {
-        return <>{text}</>;
+        return <>{text.slice(11)}</>;
       },
     },
     {
@@ -102,7 +85,6 @@ const App = () => {
       width: 120,
       render: (date) => {
         const diff = dayjs().diff(date);
-        // console.log(Math.trunc(diff / 60000));
         const a = Math.trunc(diff / 60000);
         const diff1 = (numb) => {
           switch (numb) {
@@ -177,12 +159,23 @@ const App = () => {
         return <>считаю</>;
       },
     },
-
     {
-      title: 'Действие',
+      title: '',
       dataIndex: 'e',
       key: 'e',
-      width: 210,
+      render: (_, data) => (
+        <>
+          <Button icon={<FormOutlined />} style={{ marginRight: 10 }}></Button>
+          <Button danger icon={<DeleteTwoTone twoToneColor="red" />}></Button>
+        </>
+      ),
+    },
+    {
+      title: 'Действие',
+      dataIndex: 'x',
+      key: 'x',
+      fixed: 'right',
+      width: 130,
       render: (_, data) => (
         <>
           <Button
@@ -192,10 +185,8 @@ const App = () => {
             }}
             style={{ marginRight: 10 }}
           >
-            Завершить аренду
+            Завершить
           </Button>
-          <Button icon={<FormOutlined />} style={{ marginRight: 10 }}></Button>
-          <Button danger icon={<DeleteTwoTone twoToneColor="red" />}></Button>
         </>
       ),
     },
@@ -217,9 +208,12 @@ const App = () => {
       <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
         Выдать Mercedes
       </Button>
-      <Button onClick={() => setvisibleInfom(!visibleInfom)}>Доп информация</Button>
-
-      <div>{clockState}</div>
+      <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+        Доп информация
+      </Button>
+      <Button type="primary" ghost>
+        {clockState}
+      </Button>
 
       {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />}
       {visibleTotal && (
@@ -235,10 +229,11 @@ const App = () => {
         columns={visibleInfom ? columns : columns1}
         expandable={{
           expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
-          rowExpandable: (record) => record.name !== 'Not Expandable',
+          // rowExpandable: (record) => record.name !== 'Not Expandable',
         }}
         dataSource={currentData}
         scroll={{ x: 1500 }}
+        pagination={{ pageSize: 7, position: ['bottomLeft'], hideOnSinglePage: true }}
       />
     </>
   );
