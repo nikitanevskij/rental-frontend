@@ -1,7 +1,6 @@
 import React from 'react';
 import style from './Total.module.scss';
 import dayjs from 'dayjs';
-
 import {
   CheckOutlined,
   FormOutlined,
@@ -10,9 +9,9 @@ import {
   LeftOutlined,
   DownOutlined,
 } from '@ant-design/icons';
-import { Button, Dropdown, Result, Space, Typography } from 'antd';
+import { Button, Dropdown, Result, Space, Typography, Input } from 'antd';
 import { useSelector } from 'react-redux';
-import { msToTime } from '../../helpers/helper';
+import { finalPrice, msToTime } from '../../helpers/helper';
 
 const Total = React.memo(({ setVisibleTotal, setVisibleForm, currentSelectedObj }) => {
   const { Paragraph, Text } = Typography;
@@ -77,7 +76,7 @@ const Total = React.memo(({ setVisibleTotal, setVisibleForm, currentSelectedObj 
               </Dropdown>
             </Paragraph>
             <Paragraph>
-              <RightOutlined className="site-result-demo-error-icon" /> Время выдачи оборудования:{' '}
+              <RightOutlined className="site-result-demo-error-icon" /> Время старта:{' '}
               {currentObj[0].startTimeTrip}
             </Paragraph>
             <Paragraph>
@@ -89,10 +88,19 @@ const Total = React.memo(({ setVisibleTotal, setVisibleForm, currentSelectedObj 
               {diffTime}
             </Paragraph>
             <Paragraph>
-              <CheckOutlined className="site-result-demo-error-icon" /> Сумма к оплате: 5 byn
+              <CheckOutlined className="site-result-demo-error-icon" /> Сумма к оплате:{' '}
+              {finalPrice(currentObj[0].selectEquipment, currentObj[0].startTimeTrip)} BYN
             </Paragraph>
           </div>
-          ,
+          <Input.Group compact>
+            <Input
+              style={{ width: 'calc(70% )' }}
+              suffix="BYN"
+              placeholder="Подтвердите сумму"
+              type="number"
+            />
+            <Button type="primary">Подтвердить</Button>
+          </Input.Group>
         </Result>
       </div>
     </div>

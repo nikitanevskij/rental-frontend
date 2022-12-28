@@ -6,7 +6,7 @@ import Total from '../../components/Total/Total';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
-import { msToTime } from '../../helpers/helper';
+import { finalPrice, msToTime, sum } from '../../helpers/helper';
 
 // interface DataType {
 //   key: React.Key;
@@ -27,6 +27,9 @@ const App = () => {
   const [currentSelectedObj, setCurrentSelectedObj] = React.useState({});
   const { currentData } = useSelector((state) => state.rentalSlice);
 
+  // const [sumObj, setSumObj] = React.useState([]);
+  // const [sumPrice, setSumPrice] = React.useState([]);
+
   const getDate = () => {
     const date = dayjs().format('HH:mm:ss DD/MM/YYYY');
     setclockState(date);
@@ -37,6 +40,8 @@ const App = () => {
     setInterval(getDate, 1000);
   }, []);
 
+  // const summery = React.useMemo(() => sum(sumObj, sumPrice), [sumObj, sumPrice]);
+  console.log('Обновился');
   const columns = [
     { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 140, fixed: 'left' },
     { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber', width: 160 },
@@ -73,7 +78,7 @@ const App = () => {
       title: 'Время старта',
       dataIndex: 'startTimeTrip',
       key: 'startTimeTrip',
-      width: 170,
+      width: 140,
       render: (text) => {
         return <>{text.slice(11)}</>;
       },
@@ -123,40 +128,10 @@ const App = () => {
       dataIndex: 'price',
       width: 100,
       key: 'price',
-      render: (_, data) => {
-        const diff = dayjs().diff(data.startTimeTrip);
-        const convMinute = Math.trunc(diff / 60000);
-
-        if (convMinute <= 15) {
-          const result = data.selectEquipment.reduce((sum, item) => {
-            if (item.includes('bike')) return sum + 2.5;
-            if (item.includes('sam')) return sum + 3;
-          }, 0);
-          return <>{result}</>;
-        }
-        if (convMinute >= 15 && convMinute <= 30) {
-          const result = data.selectEquipment.reduce((sum, item) => {
-            if (item.includes('bike')) return sum + 2.5;
-            if (item.includes('sam')) return sum + 6;
-          }, 0);
-          return <>{result}</>;
-        }
-        if (convMinute >= 30 && convMinute <= 45) {
-          const result = data.selectEquipment.reduce((sum, item) => {
-            if (item.includes('bike')) return sum + 5;
-            if (item.includes('sam')) return sum + 9;
-          }, 0);
-          return <>{result}</>;
-        }
-        if (convMinute >= 45 && convMinute <= 60) {
-          const result = data.selectEquipment.reduce((sum, item) => {
-            if (item.includes('bike')) return sum + 5;
-            if (item.includes('sam')) return sum + 12;
-          }, 0);
-          return <>{result}</>;
-        }
-
-        return <>считаю</>;
+      render: (_, selectEquipments) => {
+        const { startTimeTrip, selectEquipment } = selectEquipments;
+        const result = finalPrice(selectEquipment, startTimeTrip);
+        return <>{result}</>;
       },
     },
     {
