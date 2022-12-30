@@ -6,7 +6,9 @@ import Total from '../../components/Total/Total';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
-import { finalPrice, msToTime, sum } from '../../helpers/helper';
+import { finalPrice, msToTime, rentalTime } from '../../helpers/helper';
+import { useAppDispatch } from '../../store/store';
+import { returnedEquipmentNow } from '../../store/rentalSlice';
 
 // interface DataType {
 //   key: React.Key;
@@ -20,6 +22,7 @@ import { finalPrice, msToTime, sum } from '../../helpers/helper';
 
 const App = () => {
   dayjs.extend(relativeTime);
+  const dispatch = useAppDispatch();
   const [visibleForm, setVisibleForm] = React.useState(false);
   const [visibleTotal, setVisibleTotal] = React.useState(false);
   const [visibleInfom, setvisibleInfom] = React.useState(false);
@@ -41,7 +44,7 @@ const App = () => {
   }, []);
 
   // const summery = React.useMemo(() => sum(sumObj, sumPrice), [sumObj, sumPrice]);
-  console.log('Обновился');
+  // console.log('Обновился');
   const columns = [
     { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 140, fixed: 'left' },
     { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber', width: 160 },
@@ -51,13 +54,25 @@ const App = () => {
       key: 'selectEquipment',
       dataIndex: 'selectEquipment',
       width: 200,
-      render: (_, { selectEquipment }) => (
+      render: (_, { key, selectEquipment }) => (
         <>
-          {selectEquipment.map((tag) => {
+          {selectEquipment.map((tag, index, arr) => {
             let color = tag.includes('bike') ? 'green' : 'red';
 
             return (
-              <Tag color={color} key={tag} style={{ marginBottom: 2 }}>
+              <Tag
+                color={color}
+                key={tag}
+                style={{ marginBottom: 2, cursor: 'pointer' }}
+                onClick={() => {
+                  arr.length <= 1
+                    ? window.alert(
+                        'Это последнее арендное оборудование. Кликай действие «Завершить»',
+                      )
+                    : window.confirm(`Хотите сдать ${tag}?`) &&
+                      dispatch(returnedEquipmentNow({ tag, key }));
+                }}
+              >
                 {tag.toUpperCase()}
               </Tag>
             );
@@ -84,13 +99,14 @@ const App = () => {
       },
     },
     {
-      title: 'Время в пути',
-      dataIndex: 'startTimeTrip',
-      key: 'startTimeTrip',
+      title: 'Время аренды',
+      dataIndex: 'rentalTime',
+      key: 'rentalTime',
       width: 120,
       render: (date) => {
         const diff = dayjs().diff(date);
         const a = Math.trunc(diff / 60000);
+
         const diff1 = (numb) => {
           switch (numb) {
             case -8:

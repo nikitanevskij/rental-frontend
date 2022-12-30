@@ -15,6 +15,7 @@ export function msToTime(ms) {
   return days + 'д ' + hoursGet + 'ч ' + minutesGet + 'м ';
 } // конвертер времени и даты
 
+//////////////////////////////////////////////////////////////////////
 const price = [
   {
     specification: '15m',
@@ -88,3 +89,5 @@ export const finalPrice = (selectEquipments, startTimeTrip) => {
   if (minutes >= 105 && minutes <= 120) return sum(selectEquipments, price[6]);
   return 0;
 }; // экспортируемая в компонент функция с итоговой цифрой
+
+///////////////////////////////////////////////////////////////////////////
