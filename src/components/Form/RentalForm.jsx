@@ -2,7 +2,7 @@ import { Button, Form, Input, Radio, Select, Typography } from 'antd';
 import { Option } from 'antd/es/mentions';
 import './rentalForm.scss';
 import { useAppDispatch } from '../../store/store';
-import { addRent } from '../../store/rentalSlice';
+import { addRentEquipment } from '../../store/rentalSlice';
 import dayjs from 'dayjs';
 
 const { Text } = Typography;
@@ -17,7 +17,7 @@ export const RentalForm = ({ setVisibleForm }) => {
       startTimeRegistration: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       startTimeTrip: dayjs().add(10, 'minute').format('YYYY-MM-DD HH:mm:ss'),
     };
-    dispatch(addRent(values));
+    dispatch(addRentEquipment(values));
     console.log('Success:', values);
     setVisibleForm((prev) => !prev);
   };

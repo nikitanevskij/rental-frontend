@@ -118,9 +118,9 @@ export const rentalSlice = createSlice({
   name: 'rental',
   initialState,
   reducers: {
-    addRent: (state, action) => {
+    addRentEquipment: (state, action) => {
       state.currentData.unshift({ ...action.payload, key: action.payload.startTimeTrip });
-    },
+    }, // выдача основного оборудования
 
     returnedEquipmentNow: (state, action) => {
       const { tag, key } = action.payload;
@@ -155,10 +155,36 @@ export const rentalSlice = createSlice({
           (item) => item !== tag,
         );
       }
-    }, //точечный возврат оборудование вне сдачи основного оборудования пользователя
+    }, //выборочный возврат оборудование вне сдачи основного оборудования пользователя
+
+    addRentBabyCar: (state, action) => {
+      const findCarinCurrentData = state.currentData.findIndex(
+        (item) => item.key === action.payload,
+      );
+      if (findCarinCurrentData >= 0) {
+        window.alert(`Детский автомобиль ${action.payload} уже взят в аренду. `);
+        return;
+      }
+      const babyCar = {
+        key: action.payload,
+        comment: '',
+        docNumber: '',
+        phoneNumber: '',
+        selectEquipment: [action.payload],
+        returnedEquipments: [],
+        userName: 'Детский электромобиль',
+        timeRental: '15 мин',
+        startTimeTrip: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        startTimeRegistration: '',
+        description: '',
+      };
+      state.currentData.unshift(babyCar);
+    }, // выдача детского электромобиля
+
+    deleteRentBabyCar: (state, action) => {}, // возврат детсвкого электромобиля
   },
 });
 
-export const { addRent, returnedEquipmentNow } = rentalSlice.actions;
+export const { addRentEquipment, returnedEquipmentNow, addRentBabyCar } = rentalSlice.actions;
 
 export default rentalSlice.reducer;

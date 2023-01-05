@@ -8,7 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
 import { finalPrice, msToTime, rentalTime } from '../../helpers/helper';
 import { useAppDispatch } from '../../store/store';
-import { returnedEquipmentNow } from '../../store/rentalSlice';
+import { addRentBabyCar, returnedEquipmentNow } from '../../store/rentalSlice';
 
 // interface DataType {
 //   key: React.Key;
@@ -46,7 +46,7 @@ const App = () => {
   // const summery = React.useMemo(() => sum(sumObj, sumPrice), [sumObj, sumPrice]);
   // console.log('Обновился');
   const columns = [
-    { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 140, fixed: 'left' },
+    { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 200, fixed: 'left' },
     { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber', width: 160 },
     { title: 'Мобильный номер', dataIndex: 'phoneNumber', key: 'phoneNumber', width: 170 },
     {
@@ -94,15 +94,15 @@ const App = () => {
       dataIndex: 'startTimeTrip',
       key: 'startTimeTrip',
       width: 140,
-      render: (text) => {
-        return <>{text.slice(11)}</>;
+      render: (date) => {
+        return <>{date.slice(11)}</>;
       },
     },
     {
       title: 'Время аренды',
-      dataIndex: 'rentalTime',
-      key: 'rentalTime',
-      width: 120,
+      dataIndex: 'startTimeTrip',
+      key: 'startTimeTrip',
+      width: 130,
       render: (date) => {
         const diff = dayjs().diff(date);
         const a = Math.trunc(diff / 60000);
@@ -193,10 +193,10 @@ const App = () => {
       >
         Добавить аренду
       </Button>
-      <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+      <Button onClick={() => dispatch(addRentBabyCar('volvo'))} style={{ marginRight: 15 }}>
         Выдать Volvo
       </Button>
-      <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+      <Button onClick={() => dispatch(addRentBabyCar('mercedes'))} style={{ marginRight: 15 }}>
         Выдать Mercedes
       </Button>
       <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>

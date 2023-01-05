@@ -65,6 +65,18 @@ const price = [
     priceBike: 10,
     priceSam: 24,
   },
+  {
+    specification: '2h 15m',
+    minutes: '135',
+    priceBike: 10,
+    priceSam: 27,
+  },
+  {
+    specification: '2h 30m',
+    minutes: '150',
+    priceBike: 12.5,
+    priceSam: 30,
+  },
 ]; //массив зависимости цен от времени
 
 const sum = (selectEquipments, price) => {
@@ -86,7 +98,9 @@ export const finalPrice = (selectEquipments, startTimeTrip) => {
   if (minutes >= 60 && minutes <= 75) return sum(selectEquipments, price[4]);
   if (minutes >= 75 && minutes <= 90) return sum(selectEquipments, price[5]);
   if (minutes >= 90 && minutes <= 105) return sum(selectEquipments, price[6]);
-  if (minutes >= 105 && minutes <= 120) return sum(selectEquipments, price[6]);
+  if (minutes >= 105 && minutes <= 120) return sum(selectEquipments, price[7]);
+  if (minutes >= 120 && minutes <= 135) return sum(selectEquipments, price[8]);
+  if (minutes >= 135 && minutes <= 150) return sum(selectEquipments, price[9]);
   return 0;
 }; // экспортируемая в компонент функция с итоговой цифрой
 
