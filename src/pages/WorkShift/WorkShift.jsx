@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Progress, Table, Tag } from 'antd';
 import { RentalForm } from '../../components/Form/RentalForm';
 import { useSelector } from 'react-redux';
-import Total from '../../components/Total/Total';
+import { Total } from '../../components/Total/Total';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
@@ -30,9 +30,6 @@ const App = () => {
   const [currentSelectedObj, setCurrentSelectedObj] = React.useState({});
   const { currentData } = useSelector((state) => state.rentalSlice);
 
-  // const [sumObj, setSumObj] = React.useState([]);
-  // const [sumPrice, setSumPrice] = React.useState([]);
-
   const getDate = () => {
     const date = dayjs().format('HH:mm:ss DD/MM/YYYY');
     setclockState(date);
@@ -43,8 +40,6 @@ const App = () => {
     setInterval(getDate, 1000);
   }, []);
 
-  // const summery = React.useMemo(() => sum(sumObj, sumPrice), [sumObj, sumPrice]);
-  // console.log('Обновился');
   const columns = [
     { title: 'Имя, Фамилия', dataIndex: 'userName', key: 'userName', width: 200, fixed: 'left' },
     { title: 'Номер документа', dataIndex: 'docNumber', key: 'docNumber', width: 160 },
@@ -54,26 +49,26 @@ const App = () => {
       key: 'selectEquipment',
       dataIndex: 'selectEquipment',
       width: 200,
-      render: (_, { key, selectEquipment }) => (
+      render: (_, { key, equipment }) => (
         <>
-          {selectEquipment.map((tag, index, arr) => {
-            let color = tag.includes('bike') ? 'green' : 'red';
+          {equipment[0].children.map((item, index, arr) => {
+            let color = item.label.includes('bike') ? 'green' : 'red';
 
             return (
               <Tag
                 color={color}
-                key={tag}
+                key={item.label}
                 style={{ marginBottom: 2, cursor: 'pointer' }}
                 onClick={() => {
                   arr.length <= 1
                     ? window.alert(
                         'Это последнее арендное оборудование. Кликай действие «Завершить»',
                       )
-                    : window.confirm(`Хотите сдать ${tag}?`) &&
-                      dispatch(returnedEquipmentNow({ tag, key }));
+                    : window.confirm(`Хотите сдать ${item.label}?`) &&
+                      dispatch(returnedEquipmentNow({ tag: item, key }));
                 }}
               >
-                {tag.toUpperCase()}
+                {item.label.toUpperCase()}
               </Tag>
             );
           })}
@@ -144,9 +139,9 @@ const App = () => {
       dataIndex: 'price',
       width: 100,
       key: 'price',
-      render: (_, selectEquipments) => {
-        const { startTimeTrip, selectEquipment } = selectEquipments;
-        const result = finalPrice(selectEquipment, startTimeTrip);
+      render: (_, obj) => {
+        const { startTimeTrip, equipment } = obj;
+        const result = finalPrice(equipment[0].children, startTimeTrip);
         return <>{result}</>;
       },
     },
@@ -193,10 +188,10 @@ const App = () => {
       >
         Добавить аренду
       </Button>
-      <Button onClick={() => dispatch(addRentBabyCar('volvo'))} style={{ marginRight: 15 }}>
+      <Button onClick={() => dispatch(addRentBabyCar('Volvo'))} style={{ marginRight: 15 }}>
         Выдать Volvo
       </Button>
-      <Button onClick={() => dispatch(addRentBabyCar('mercedes'))} style={{ marginRight: 15 }}>
+      <Button onClick={() => dispatch(addRentBabyCar('Mercedes'))} style={{ marginRight: 15 }}>
         Выдать Mercedes
       </Button>
       <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>

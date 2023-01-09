@@ -24,3 +24,11 @@
   z-index: 4;
   overflow: auto;
 }
+
+.editIcon {
+  cursor: pointer;
+  color: #1677ff;
+  &:hover {
+    color: #6db3ff;
+  }
+}

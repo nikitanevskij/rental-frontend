@@ -81,8 +81,8 @@ const price = [
 
 const sum = (selectEquipments, price) => {
   const result = selectEquipments.reduce((sum, item) => {
-    if (item.includes('bike')) return sum + price.priceBike;
-    if (item.includes('sam')) return sum + price.priceSam;
+    if (item.label.includes('bike')) return sum + price.priceBike;
+    if (item.label.includes('sam')) return sum + price.priceSam;
   }, 0);
   return result;
 }; // вспомогательная функция, считает сумму исходя из массива оборудования и цены за конкретное время

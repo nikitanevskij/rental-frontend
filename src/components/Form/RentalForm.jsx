@@ -9,16 +9,47 @@ const { Text } = Typography;
 
 export const RentalForm = ({ setVisibleForm }) => {
   const dispatch = useAppDispatch();
-  const onFinish = (fieldsValue) => {
-    const values = {
-      ...fieldsValue,
-      key: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      phoneNumber: `+375 (${fieldsValue.prefix}) ${fieldsValue.phoneNumber}`,
+  const onFinish = ({
+    userName,
+    docNumber,
+    comment,
+    prefix,
+    phoneNumber,
+    timeRental,
+    selectEquipment,
+  }) => {
+    const objRental = {
+      key: dayjs().add(10, 'minute').format('YYYY-MM-DD HH:mm:ss'),
       startTimeRegistration: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      userName,
+      docNumber,
+      phoneNumber: `+375 (${prefix}) ${phoneNumber}`,
+      timeRental,
+      equipment: [
+        {
+          key: '1',
+          type: 'group',
+          label: 'Текущее оборудование:',
+          children: selectEquipment.map((item, index) => ({
+            key: String(index + 1),
+            label: item,
+          })),
+        },
+        {
+          type: 'divider',
+        },
+        {
+          key: '2',
+          type: 'group',
+          label: 'Ранее принятое оборудование:',
+          children: [],
+        },
+      ],
       startTimeTrip: dayjs().add(10, 'minute').format('YYYY-MM-DD HH:mm:ss'),
+      comment,
     };
-    dispatch(addRentEquipment(values));
-    console.log('Success:', values);
+    dispatch(addRentEquipment(objRental));
+    // console.log('Success:', objRental);
     setVisibleForm((prev) => !prev);
   };
 
