@@ -1,14 +1,14 @@
 import React from 'react';
-import { Button, Progress, Table, Tag } from 'antd';
+import { Button, Progress, Table, Tag, notification } from 'antd';
 import { RentalForm } from '../../components/Form/RentalForm';
 import { useSelector } from 'react-redux';
 import { Total } from '../../components/Total/Total';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
-import { finalPrice, msToTime, rentalTime } from '../../helpers/helper';
+import { finalPrice, msToTime } from '../../helpers/helper';
 import { useAppDispatch } from '../../store/store';
-import { addRentBabyCar, returnedEquipmentNow } from '../../store/rentalSlice';
+import { addRentBabyCar, returnedEquipmentNow, updateStartTimeTrip } from '../../store/rentalSlice';
 
 // interface DataType {
 //   key: React.Key;
@@ -98,38 +98,52 @@ const App = () => {
       dataIndex: 'startTimeTrip',
       key: 'startTimeTrip',
       width: 130,
-      render: (date) => {
+      render: (date, { key }) => {
         const diff = dayjs().diff(date);
-        const a = Math.trunc(diff / 60000);
+        // console.log(diff, key);
+        // const a = Math.trunc(diff / 60000);
 
-        const diff1 = (numb) => {
-          switch (numb) {
-            case -8:
-              return 10;
-            case -7:
-              return 20;
-            case -6:
-              return 30;
-            case -5:
-              return 40;
-            case -4:
-              return 50;
-            case -3:
-              return 60;
-            case -2:
-              return 70;
-            case -1:
-              return 80;
-            case -0:
-              return 90;
-            case 0:
-              return 100;
-            default:
-          }
-        };
+        // const diff1 = (numb) => {
+        //   switch (numb) {
+        //     case -8:
+        //       return 10;
+        //     case -7:
+        //       return 20;
+        //     case -6:
+        //       return 30;
+        //     case -5:
+        //       return 40;
+        //     case -4:
+        //       return 50;
+        //     case -3:
+        //       return 60;
+        //     case -2:
+        //       return 70;
+        //     case -1:
+        //       return 80;
+        //     case -0:
+        //       return 90;
+        //     case 0:
+        //       return 100;
+        //     default:
+        //   }
+        // };
         if (diff < 0) {
-          return <Progress percent={diff1(a)} status="active" />;
+          return (
+            <>
+              <Button onClick={() => dispatch(updateStartTimeTrip(key))} block type="primary">
+                Start Time!
+              </Button>
+              {/* <Progress
+                percent={diff1(a)}
+                status="active"
+                style={{ marginRight: 8, cursor: 'pointer' }}
+                showInfo={false}
+              /> */}
+            </>
+          );
         }
+
         const result = msToTime(diff);
         return <>{result}</>;
       },

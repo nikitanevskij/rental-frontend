@@ -135,6 +135,13 @@ export const rentalSlice = createSlice({
       state.currentData.unshift(action.payload);
     }, // выдача основного оборудования
 
+    updateStartTimeTrip: (state, action) => {
+      const indexElement = state.currentData.findIndex((item) => item.key === action.payload);
+      const element = state.currentData[indexElement];
+
+      element.startTimeTrip = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    }, // обновление времени старта
+
     returnedEquipmentNow: (state, action) => {
       const { tag, key } = action.payload;
       const indexElement = state.currentData.findIndex((item) => item.key === key);
@@ -209,7 +216,12 @@ export const rentalSlice = createSlice({
   },
 });
 
-export const { addRentEquipment, returnedEquipmentNow, addRentBabyCar, deleteRent } =
-  rentalSlice.actions;
+export const {
+  addRentEquipment,
+  returnedEquipmentNow,
+  addRentBabyCar,
+  deleteRent,
+  updateStartTimeTrip,
+} = rentalSlice.actions;
 
 export default rentalSlice.reducer;
