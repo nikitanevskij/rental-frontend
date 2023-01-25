@@ -9,6 +9,7 @@ import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/ic
 import { finalPrice, msToTime } from '../../helpers/helper';
 import { useAppDispatch } from '../../store/store';
 import { addRentBabyCar, returnedEquipmentNow, updateStartTimeTrip } from '../../store/rentalSlice';
+import './workshift.scss';
 
 // interface DataType {
 //   key: React.Key;
@@ -194,27 +195,28 @@ const App = () => {
   const columns1 = [columns[0], ...columns.slice(3, 11)];
 
   return (
-    <>
-      <Button
-        type="primary"
-        onClick={() => setVisibleForm(!visibleForm)}
-        style={{ marginBottom: 15, marginRight: 15 }}
-      >
-        Добавить аренду
-      </Button>
-      <Button onClick={() => dispatch(addRentBabyCar('Volvo'))} style={{ marginRight: 15 }}>
-        Выдать Volvo
-      </Button>
-      <Button onClick={() => dispatch(addRentBabyCar('Mercedes'))} style={{ marginRight: 15 }}>
-        Выдать Mercedes
-      </Button>
-      <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
-        Доп информация
-      </Button>
-      <Button type="primary" ghost>
-        {clockState}
-      </Button>
-
+    <div className="worksift-wrapper">
+      <div>
+        <Button
+          type="primary"
+          onClick={() => setVisibleForm(!visibleForm)}
+          style={{ marginBottom: 15, marginRight: 15 }}
+        >
+          Добавить аренду
+        </Button>
+        <Button onClick={() => dispatch(addRentBabyCar('Volvo'))} style={{ marginRight: 15 }}>
+          Выдать Volvo
+        </Button>
+        <Button onClick={() => dispatch(addRentBabyCar('Mercedes'))} style={{ marginRight: 15 }}>
+          Выдать Mercedes
+        </Button>
+        <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+          Доп информация
+        </Button>
+        <Button type="primary" ghost>
+          {clockState}
+        </Button>
+      </div>
       {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />}
       {visibleTotal && (
         <Total
@@ -224,18 +226,19 @@ const App = () => {
           setCurrentSelectedObj={setCurrentSelectedObj}
         />
       )}
-      <Table
-        style={{ overflow: 'auto' }}
-        columns={visibleInfom ? columns : columns1}
-        expandable={{
-          expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
-          // rowExpandable: (record) => record.name !== 'Not Expandable',
-        }}
-        dataSource={currentData}
-        scroll={{ x: 1500 }}
-        pagination={{ pageSize: 7, position: ['bottomLeft'], hideOnSinglePage: true }}
-      />
-    </>
+      <div className="result-block">
+        <Table
+          columns={visibleInfom ? columns : columns1}
+          expandable={{
+            expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
+            // rowExpandable: (record) => record.name !== 'Not Expandable',
+          }}
+          dataSource={currentData}
+          scroll={{ x: 'max-content' }}
+          pagination={{ pageSize: 7, position: ['bottomLeft'], hideOnSinglePage: true }}
+        />
+      </div>
+    </div>
   );
 };
 
