@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Progress, Table, Tag, notification } from 'antd';
+import { Button, Table, Tag } from 'antd';
 import { RentalForm } from '../../components/Form/RentalForm';
 import { useSelector } from 'react-redux';
 import { Total } from '../../components/Total/Total';
@@ -196,28 +196,33 @@ const App = () => {
 
   return (
     <div className="worksift-wrapper">
-      <div>
-        <Button
+      <div style={{ marginBottom: 15, display: 'flex', justifyContent: 'space-between' }}>
+        {/* <Button
           type="primary"
           onClick={() => setVisibleForm(!visibleForm)}
           style={{ marginBottom: 15, marginRight: 15 }}
         >
           Добавить аренду
-        </Button>
-        <Button onClick={() => dispatch(addRentBabyCar('Volvo'))} style={{ marginRight: 15 }}>
-          Выдать Volvo
-        </Button>
-        <Button onClick={() => dispatch(addRentBabyCar('Mercedes'))} style={{ marginRight: 15 }}>
-          Выдать Mercedes
-        </Button>
-        <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
-          Доп информация
-        </Button>
-        <Button type="primary" ghost>
-          {clockState}
-        </Button>
+        </Button> */}
+        <div>
+          <Button onClick={() => dispatch(addRentBabyCar('Volvo'))} style={{ marginRight: 15 }}>
+            Выдать Volvo
+          </Button>
+          <Button onClick={() => dispatch(addRentBabyCar('Mercedes'))} style={{ marginRight: 15 }}>
+            Выдать Mercedes
+          </Button>
+          <Button onClick={() => setvisibleInfom(!visibleInfom)} style={{ marginRight: 15 }}>
+            Доп информация
+          </Button>
+        </div>
+        <div>
+          <Button type="primary" ghost>
+            {clockState}
+          </Button>
+        </div>
       </div>
-      {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />}
+      <RentalForm />
+      {/* {visibleForm && <RentalForm setVisibleForm={setVisibleForm} />} */}
       {visibleTotal && (
         <Total
           setVisibleTotal={setVisibleTotal}

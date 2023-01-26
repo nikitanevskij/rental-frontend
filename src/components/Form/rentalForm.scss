@@ -1,29 +1,10 @@
-// .active {
-// }
-.active {
-  // content: '';
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 3;
+.ant-checkbox-wrapper {
+  margin-inline-start: 0px !important;
 }
-
-.inner {
-  padding: 20px 20px 5px 20px;
-  border-radius: 15px;
-  background: #ffffff;
-  position: absolute;
-  max-width: 800px;
-  max-height: 550px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  z-index: 4;
-  overflow: auto;
+.ant-checkbox-group {
+  display: block;
+}
+.checkbox-wrapper {
+  display: flex;
+  justify-content: space-between;
 }
