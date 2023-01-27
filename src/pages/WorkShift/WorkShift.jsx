@@ -8,7 +8,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { FormOutlined, DeleteTwoTone, ClockCircleOutlined } from '@ant-design/icons';
 import { finalPrice, msToTime } from '../../helpers/helper';
 import { useAppDispatch } from '../../store/store';
-import { addRentBabyCar, returnedEquipmentNow, updateStartTimeTrip } from '../../store/rentalSlice';
+import {
+  addRentBabyCar,
+  fetchGetRental,
+  returnedEquipmentNow,
+  updateStartTimeTrip,
+} from '../../store/rentalSlice';
 import './workshift.scss';
 
 // interface DataType {
@@ -39,6 +44,8 @@ const App = () => {
   React.useEffect(() => {
     getDate();
     setInterval(getDate, 1000);
+    dispatch(fetchGetRental());
+    console.log('Hello');
   }, []);
 
   const columns = [

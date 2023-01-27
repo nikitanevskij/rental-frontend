@@ -4,11 +4,12 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Checkbox, Segmented, Button, Col, Drawer, Form, Input, Row, Select, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useAppDispatch } from '../../store/store';
-import { addRentEquipment } from '../../store/rentalSlice';
+import { addRentEquipment, fetchCreateRental } from '../../store/rentalSlice';
 
 const { Option } = Select;
 
 export const RentalForm = () => {
+  const id = React.useId();
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const [open, setOpen] = React.useState(false);
@@ -45,7 +46,8 @@ export const RentalForm = () => {
       startTimeTrip: dayjs().add(10, 'minute').format('YYYY-MM-DD HH:mm:ss'),
       comment,
     };
-    dispatch(addRentEquipment(objRental));
+    dispatch(fetchCreateRental(objRental));
+    console.log(objRental);
     setOpen(false);
     form.resetFields();
   };
@@ -207,14 +209,14 @@ export const RentalForm = () => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="timeRental">
-                <Segmented
-                  block
-                  options={optionsTimeRental}
-                  defaultValue={'fact'}
-                  onChange={(value) => setTimeRental(value)}
-                />
-              </Form.Item>
+              {/* <Form.Item name="timeRental"> */}
+              <Segmented
+                block
+                options={optionsTimeRental}
+                defaultValue={'fact'}
+                onChange={(value) => setTimeRental(value)}
+              />
+              {/* </Form.Item> */}
             </Col>
 
             <Col span={24}>
@@ -228,28 +230,30 @@ export const RentalForm = () => {
                   <div className="checkbox-wrapper">
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       {bikeBox1.map((item, index) => (
-                        <Checkbox value={item} key={index}>
+                        <Checkbox value={item} key={id + index}>
                           {item}
                         </Checkbox>
                       ))}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       {bikeBox2.map((item, index) => (
-                        <Checkbox value={item} key={index}>
+                        <Checkbox value={item} key={id + index}>
                           {item}
                         </Checkbox>
                       ))}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       {bikeBox3.map((item, index) => (
-                        <Checkbox value={item} key={index}>
+                        <Checkbox value={item} key={id + index}>
                           {item}
                         </Checkbox>
                       ))}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       {electroBox.map((item, index) => (
-                        <Checkbox value={item}>{item}</Checkbox>
+                        <Checkbox value={item} key={id + index}>
+                          {item}
+                        </Checkbox>
                       ))}
                     </div>
                   </div>

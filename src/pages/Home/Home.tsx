@@ -20,12 +20,7 @@ export const Home: React.FC = () => {
 
   return (
     <Layout className="root">
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        // style={{ height: '100%' }}
-      >
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" />
         <MenuSidebar />
       </Sider>

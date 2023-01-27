@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from '../axios';
 import dayjs from 'dayjs';
 import { finalPrice, msToTime } from '../helpers/helper';
 
@@ -127,6 +128,30 @@ const initialState = {
   complietedData: [],
 };
 
+export const fetchGetRental = createAsyncThunk(
+  'rental/getRental',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get('/rental');
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const fetchCreateRental = createAsyncThunk(
+  'rental/create',
+  async (obj, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post('/rental', obj);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 export const rentalSlice = createSlice({
   name: 'rental',
   initialState,
@@ -213,6 +238,25 @@ export const rentalSlice = createSlice({
       state.complietedData.unshift(action.payload);
       state.currentData = state.currentData.filter((item) => item.key !== action.payload.key);
     }, // возврат оборудования
+  },
+
+  extraReducers: (builder) => {
+    //CREATE RENTAL
+    builder.addCase(fetchCreateRental.pending, (state) => {});
+    builder.addCase(fetchCreateRental.fulfilled, (state, action) => {
+      state.currentData.unshift(action.payload);
+    });
+    builder.addCase(fetchCreateRental.rejected, (state) => {});
+    //GET RENTAL
+    builder.addCase(fetchGetRental.pending, (state) => {
+      state.currentData = null;
+    });
+    builder.addCase(fetchGetRental.fulfilled, (state, action) => {
+      state.currentData = action.payload.reverse();
+    });
+    builder.addCase(fetchGetRental.rejected, (state) => {
+      state.currentData = null;
+    });
   },
 });
 
